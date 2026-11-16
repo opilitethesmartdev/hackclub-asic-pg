@@ -6,11 +6,3 @@ modules:
   - name: 'factory_test' # Factory test module, address 1
     mux_id: 0
     blk_id: 1
-  - name: 'common_sram' # Reserved 4x4 slot for the shared Arrakeen macro
-    mux_id: 8
-    blk_id: 7
-    width: 4
-    height: 4
-    pg_vdd: false
-    pg_vaa: false
-    common_sram: true
