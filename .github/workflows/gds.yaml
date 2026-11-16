@@ -58,6 +58,8 @@ jobs:
 
       - name: Generate Arrakeen 512x32 SRAM views
         working-directory: tt-multiplexer/ol2/tt_top
+        env:
+          PDM_BUILD_SCM_VERSION: "0.1.1.dev96+g333141f"
         run: |
           mkdir -p gds lef verilog
           uv sync --project arrakeen_sram
