@@ -56,7 +56,7 @@ jobs:
           version: "0.11.7"
           enable-cache: true
 
-      - name: Generate Arrakeen 512x32 SRAM views
+      - name: Generate Arrakeen 256x32 SRAM bank views
         working-directory: tt-multiplexer/ol2/tt_top
         env:
           PDM_BUILD_SCM_VERSION: "0.1.1.dev96+g333141f"
