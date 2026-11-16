@@ -50,6 +50,19 @@ jobs:
           cache: 'pip'
       - run: pip install -r tt-multiplexer/py/requirements.txt -r tt/requirements.txt -r verilog/dv/mux/requirements.txt
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.11.7"
+          enable-cache: true
+
+      - name: Generate Arrakeen 512x32 SRAM views
+        working-directory: tt-multiplexer/ol2/tt_top
+        run: |
+          mkdir -p gds lef verilog
+          uv sync --project arrakeen_sram
+          uv run --project arrakeen_sram arrakeen_sram/generate_views.py
+
       - name: Update caravel configuration
         run: python ./tt/configure.py --update-shuttle
 
