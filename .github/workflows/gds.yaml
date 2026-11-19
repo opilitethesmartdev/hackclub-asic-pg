@@ -53,6 +53,35 @@ jobs:
       - name: Update caravel configuration
         run: python ./tt/configure.py --update-shuttle
 
+      - name: Reserve common SRAM macro slot
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          path = Path("tt-multiplexer/cfg/modules_placed.yaml")
+          data = yaml.safe_load(path.read_text())
+          modules = data.setdefault("modules", [])
+          if any(module.get("name") == "common_sram" for module in modules):
+              raise SystemExit("common_sram slot already exists")
+          modules.insert(0, {
+              "name": "common_sram",
+              "x": 0,
+              "y": 4,
+              "width": 4,
+              "height": 4,
+              "pg_vdd": False,
+              "pg_vaa": False,
+              "analog": {},
+              "uses_sram": False,
+              "common_sram": True,
+          })
+          path.write_text(yaml.safe_dump(data, sort_keys=False))
+          print("Reserved common_sram at mux 8, block 7 (4x4)")
+          PY
+          cd tt-multiplexer
+          ./py/gen_tt_user_module.py rtl/tt_user_module.v.mak cfg/modules_placed.yaml > rtl/tt_user_module.v
+
       - name: Install Nix and configure FOSSi cache
         uses: cachix/install-nix-action@v31
         with:
