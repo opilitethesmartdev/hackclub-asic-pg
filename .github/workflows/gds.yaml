@@ -66,8 +66,8 @@ jobs:
               raise SystemExit("common_sram slot already exists")
           modules.insert(0, {
               "name": "common_sram",
-              "x": 0,
-              "y": 4,
+              "x": 7,
+              "y": 5,
               "width": 4,
               "height": 4,
               "pg_vdd": False,
@@ -77,7 +77,7 @@ jobs:
               "common_sram": True,
           })
           path.write_text(yaml.safe_dump(data, sort_keys=False))
-          print("Reserved common_sram at mux 8, block 7 (4x4)")
+          print("Reserved common_sram at mux 6, block 6 (4x4)")
           PY
           cd tt-multiplexer
           ./py/gen_tt_user_module.py rtl/tt_user_module.v.mak cfg/modules_placed.yaml > rtl/tt_user_module.v
