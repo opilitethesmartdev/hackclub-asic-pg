@@ -1,6 +1,6 @@
 [submodule "tt-multiplexer"]
 	path = tt-multiplexer
-	url = https://github.com/opilitethesmartdev/tt-multiplexer-common-sram
+	url = https://github.com/opilitethesmartdev/tt-multiplexer-sram-v2
 	branch = main
 [submodule "tt"]
 	path = tt
