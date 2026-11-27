@@ -126,6 +126,23 @@ jobs:
       - name: Create foundry submission directory
         run: python ./tt/configure.py --create-foundry-submission
 
+      # The foundry density rules (DCF.1a, PL.8, Mx.4) need dummy COMP,
+      # Poly2 and metal fill, which neither the tt_top flow nor the
+      # submission step inserted (87 density errors in the precheck). Use the
+      # PDK's own fill script, then re-run the GDS short check on the filled
+      # layout: fill is floating metal and must not touch any net.
+      - name: Insert density fill
+        run: |
+          OAS=$(ls foundry_submission/oas/*.oas)
+          nix-shell $GITHUB_WORKSPACE/tt-multiplexer/shell.nix --run "\
+            klayout -b -zz -r $PDK_ROOT/$PDK/libs.tech/klayout/tech/scripts/fill_all.rb \
+              -rd input=$OAS -rd output=$OAS.filled.oas && \
+            mv $OAS.filled.oas $OAS && \
+            if [ -f tt-multiplexer/ol2/tt_top/gds_short_check.py ]; then \
+              klayout -b -r tt-multiplexer/ol2/tt_top/gds_short_check.py \
+                -rd gds_in=$OAS -rd report_out=foundry_submission/gds_short_check.json; \
+            fi"
+
       - name: Print build summary
         run: |
           OAS_FILE=foundry_submission/oas/*.oas
